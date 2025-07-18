@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Agentic Marketing Mix Modeling</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+      body { font-family: 'Inter', sans-serif; background-color: #0f172a; color: #f8fafc; }
+      .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+      .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+      .custom-scrollbar::-webkit-scrollbar-thumb { background: #475569; border-radius: 3px; }
+      .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #7f8c9b; }
+      .glass-pane { background: rgba(30, 41, 59, 0.5); backdrop-filter: blur(10px); border: 1px solid rgba(100, 116, 139, 0.3); border-radius: 0.75rem; }
+      .primary-button { background: linear-gradient(to right, #4f46e5, #a855f7); color: white; padding: 0.75rem 1.5rem; border-radius: 0.5rem; font-weight: 600; transition: all 0.2s ease-in-out; }
+      .primary-button:hover { box-shadow: 0 0 15px rgba(168, 85, 247, 0.5); transform: translateY(-1px); }
+      .secondary-button { background-color: rgba(71, 85, 105, 0.4); border: 1px solid rgba(100, 116, 139, 0.5); color: #cbd5e1; padding: 0.5rem 1rem; border-radius: 0.5rem; font-weight: 500; transition: all 0.2s; }
+      .secondary-button:hover { background-color: rgba(71, 85, 105, 0.7); border-color: rgba(100, 116, 139, 0.8); }
+      .prose-invert { color: #d1d5db; }
+      .prose-invert h1, .prose-invert h2, .prose-invert h3, .prose-invert h4, .prose-invert h5, .prose-invert strong { color: #f9fafb; }
+      .range-thumb::-webkit-slider-thumb {
+          -webkit-appearance: none; appearance: none;
+          width: 20px; height: 20px;
+          background: #a855f7;
+          border-radius: 50%;
+          cursor: pointer;
+          border: 2px solid #f9fafb;
+          margin-top: -8px; /* Offset for vertical alignment */
+      }
+      .range-thumb::-moz-range-thumb {
+          width: 20px; height: 20px;
+          background: #a855f7;
+          border-radius: 50%;
+          cursor: pointer;
+          border: 2px solid #f9fafb;
+      }
+      /* Additional styles from the HTML version for compatibility */
+      .status-badge { padding: 0.25rem 0.75rem; border-radius: 9999px; font-weight: 500; font-size: 0.875rem; }
+      .status-badge.green { background-color: #dcfce7; color: #166534; }
+      .status-badge.yellow { background-color: #fef9c3; color: #854d0e; }
+      .action-btn-group button { border: 1px solid #d1d5db; padding: 0.25rem 0.75rem; font-size: 0.875rem; transition: all 0.2s; }
+      .action-btn-group button.approve { border-top-left-radius: 0.5rem; border-bottom-left-radius: 0.5rem; }
+      .action-btn-group button.exclude { border-top-right-radius: 0.5rem; border-bottom-right-radius: 0.5rem; margin-left: -1px; }
+      .action-btn-group button.active { color: white; border-color: transparent; }
+      .action-btn-group button.approve.active { background-color: #22c55e; }
+      .action-btn-group button.exclude.active { background-color: #6b7280; }
+      /* Custom styles for prose tables */
+      .prose-invert table { width: 100%; border-collapse: collapse; margin-top: 1em; margin-bottom: 1em; }
+      .prose-invert th, .prose-invert td { border: 1px solid #475569; padding: 0.5rem 0.75rem; }
+      .prose-invert thead { background-color: rgba(71, 85, 105, 0.5); }
+      .prose-invert thead th { color: #f1f5f9; font-weight: 600; text-align: left;}
+      .prose-invert tbody tr:nth-child(even) { background-color: rgba(30, 41, 59, 0.3); }
+      .step-button-nav:hover:not(:disabled) { text-decoration: underline; text-decoration-color: rgba(168, 85, 247, 0.5); text-underline-offset: 4px; }
+    </style>
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@^19.1.0",
+    "react-dom/": "https://esm.sh/react-dom@^19.1.0/",
+    "react/": "https://esm.sh/react@^19.1.0/",
+    "d3-dsv": "https://esm.sh/d3-dsv@^3.0.1",
+    "@google/genai": "https://esm.sh/@google/genai@^1.9.0",
+    "react-icons/": "https://esm.sh/react-icons@^5.5.0/",
+    "recharts": "https://esm.sh/recharts@^3.1.0"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+<body>
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+</body>
+</html>
