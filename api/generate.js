@@ -1,10 +1,11 @@
-// File: api/generate.js
+// In file: api/generate.js
 
+// These two lines you have are correct!
 const { GoogleGenerativeAI } = require("@google/generative-ai");
-
-// This uses the API key you'll set up in Vercel
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
 
+// THIS IS THE MISSING PART
+// This function handles the request from your frontend
 export default async function handler(req, res) {
   // Make sure the request is a POST request
   if (req.method !== 'POST') {
@@ -12,7 +13,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { prompt } = req.body;
+    const { prompt } = req.body; // Get prompt from the request
 
     if (!prompt) {
       return res.status(400).json({ error: 'Prompt is required' });
@@ -22,12 +23,12 @@ export default async function handler(req, res) {
     const result = await model.generateContent(prompt);
     const response = await result.response;
     const text = response.text();
-
-    // Send the AI's response back to your React app
+    
+    // Send the AI's answer back
     res.status(200).json({ response: text });
 
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Failed to generate content' });
+    res.status(500).json({ error: "Failed to generate content" });
   }
 }
