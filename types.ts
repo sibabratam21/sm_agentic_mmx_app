@@ -1,3 +1,4 @@
+
 export enum AppStep {
   Welcome,
   DataValidation,
@@ -83,7 +84,7 @@ export interface ModelDetail {
 
 export interface ModelRun {
   id: string;
-  algo: 'Bayesian Regression' | 'NN' | 'LightGBM';
+  algo: 'Bayesian Regression' | 'NN' | 'LightGBM' | 'GLM Regression';
   rsq: number;
   mape: number;
   roi: number; // Blended ROI

@@ -1,4 +1,5 @@
 
+
 import React from 'react';
 import { FeatureParams } from '../types';
 
@@ -24,19 +25,19 @@ export const FeatureEngineering: React.FC<FeatureEngineeringProps> = ({ initialP
         <div className="p-4 md:p-6 max-w-7xl mx-auto space-y-8">
             {agentSummary && (
                 <div className="glass-pane p-6 animate-fade-in">
-                    <h3 className="text-xl font-semibold text-white mb-2">Agent's Analysis</h3>
-                    <div className="prose prose-sm prose-invert max-w-none text-slate-300 whitespace-pre-wrap">
+                    <h3 className="text-xl font-semibold text-gray-900 mb-2">Agent's Analysis</h3>
+                    <div className="prose prose-sm max-w-none text-gray-700 whitespace-pre-wrap">
                         {agentSummary}
                     </div>
                 </div>
             )}
 
             <div className="glass-pane p-6">
-                <h3 className="text-xl font-semibold text-white mb-2">Feature Engineering</h3>
-                <p className="text-slate-400 mb-6">Review and adjust the agent's recommended parameters. Your domain expertise is valuable here.</p>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">Feature Engineering</h3>
+                <p className="text-gray-600 mb-6">Review and adjust the agent's recommended parameters. Your domain expertise is valuable here.</p>
                 <div className="overflow-x-auto">
                     <table className="w-full text-left text-sm">
-                        <thead className="bg-slate-700/50">
+                        <thead className="bg-gray-100">
                             <tr>
                                 <th className="p-3 w-1/6">Channel</th>
                                 <th className="p-3 w-1/4">Adstock (Decay)</th>
@@ -47,7 +48,7 @@ export const FeatureEngineering: React.FC<FeatureEngineeringProps> = ({ initialP
                         </thead>
                         <tbody>
                             {initialParams.map(p => (
-                                <tr key={p.channel} className="border-b border-slate-700">
+                                <tr key={p.channel} className="border-b border-gray-200">
                                     <td className="p-3 font-semibold">{p.channel}</td>
                                     <td className="p-3">
                                         <div className="flex items-center gap-3">
@@ -58,9 +59,9 @@ export const FeatureEngineering: React.FC<FeatureEngineeringProps> = ({ initialP
                                                 step="0.05"
                                                 value={p.adstock}
                                                 onChange={(e) => handleParamChange(p.channel, 'adstock', parseFloat(e.target.value))}
-                                                className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer range-thumb"
+                                                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer range-thumb"
                                             />
-                                            <span className="font-mono text-slate-300 w-12 text-center">{p.adstock.toFixed(2)}</span>
+                                            <span className="font-mono text-gray-700 w-12 text-center">{p.adstock.toFixed(2)}</span>
                                         </div>
                                     </td>
                                      <td className="p-3">
@@ -72,16 +73,16 @@ export const FeatureEngineering: React.FC<FeatureEngineeringProps> = ({ initialP
                                                 step="1"
                                                 value={p.lag}
                                                 onChange={(e) => handleParamChange(p.channel, 'lag', parseInt(e.target.value, 10))}
-                                                className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer range-thumb"
+                                                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer range-thumb"
                                             />
-                                            <span className="font-mono text-slate-300 w-10 text-center">{p.lag}</span>
+                                            <span className="font-mono text-gray-700 w-10 text-center">{p.lag}</span>
                                         </div>
                                     </td>
                                      <td className="p-2">
                                         <select 
                                             value={p.transform}
                                             onChange={(e) => handleParamChange(p.channel, 'transform', e.target.value)}
-                                            className="w-full p-2 bg-slate-700/50 border border-slate-600 rounded-md"
+                                            className="w-full p-2 bg-white border border-gray-300 rounded-md"
                                         >
                                             <option>Log-transform</option>
                                             <option>Negative Exponential</option>
@@ -89,7 +90,7 @@ export const FeatureEngineering: React.FC<FeatureEngineeringProps> = ({ initialP
                                             <option>Power</option>
                                         </select>
                                     </td>
-                                    <td className="p-3 text-slate-400 text-xs italic">{p.rationale}</td>
+                                    <td className="p-3 text-gray-500 text-xs italic">{p.rationale}</td>
                                 </tr>
                             ))}
                         </tbody>

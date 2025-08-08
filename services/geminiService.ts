@@ -1,3 +1,5 @@
+
+
 import { GoogleGenAI, Type } from "@google/genai";
 import { AppStep, ColumnType, EdaResult, UserColumnSelection, FeatureParams, ModelRun, EdaInsights, ParsedData, ChannelDiagnostic, TrendDataPoint, ColumnSummaryItem, ModelingInteractionResponse, CalibrationInteractionResponse, ModelDetail, OptimizerInteractionResponse, OptimizerScenario } from '../types';
 
@@ -257,7 +259,7 @@ const leaderboardSchema = {
         type: Type.OBJECT,
         properties: {
             id: { type: Type.STRING },
-            algo: { type: Type.STRING, enum: ['Bayesian Regression', 'NN', 'LightGBM'] },
+            algo: { type: Type.STRING, enum: ['Bayesian Regression', 'NN', 'LightGBM', 'GLM Regression'] },
             rsq: { type: Type.NUMBER },
             mape: { type: Type.NUMBER },
             roi: { type: Type.NUMBER },
@@ -294,19 +296,19 @@ Given the user's setup, generate a plausible but *simulated* leaderboard of mode
 - User Input: "${userInput}"
 
 **Task:**
-1.  **Simulate 9 distinct model runs** (3 for each algorithm: 'Bayesian Regression', 'NN', 'LightGBM'). Use IDs like "br_1", "nn_1", "lgbm_1".
+1.  **Simulate 12 distinct model runs** (3 for each algorithm: 'Bayesian Regression', 'NN', 'LightGBM', 'GLM Regression'). Use IDs like "br_1", "nn_1", "lgbm_1", "glm_1".
 2.  For each run, generate realistic top-level metrics: **rsq** (0.7-0.95), **mape** (5-15%), and blended **roi** (-1.0 to 6.0).
 3.  For each run, generate a **detailed breakdown for every channel** in the provided features. This breakdown goes in the 'details' array.
     -   **name**: The channel name.
     -   **included**: Set to \`true\`.
     -   **contribution**: Assign a plausible contribution percentage. The sum of contributions for all channels should be between 60-85%.
     -   **roi**: Assign a plausible ROI for the channel (can be negative).
-    -   **pValue**: For 'Bayesian Regression' models, generate a p-value between 0.00 and 0.25. For 'NN' and 'LightGBM', set pValue to \`null\`.
+    -   **pValue**: For 'Bayesian Regression' and 'GLM Regression' models, generate a p-value between 0.00 and 0.25. For 'NN' and 'LightGBM', set pValue to \`null\`.
     -   **adstock, lag, transform**: Use the values from the 'Feature Parameters' provided.
-4.  **Write a brief, insightful commentary for each run** specific to its algorithm (Bayesian for interpretability, NN for non-linearity, LightGBM for performance).
+4.  **Write a brief, insightful commentary for each run** specific to its algorithm (Bayesian for interpretability, NN for non-linearity, LightGBM for performance, GLM Regression for robust statistical baselining).
 5.  Ensure results are varied to present realistic trade-offs.
 
-Generate a JSON array of 9 model run objects according to the schema. Ensure every field is populated correctly.
+Generate a JSON array of 12 model run objects according to the schema. Ensure every field is populated correctly.
 `;
 
     const response = await ai.models.generateContent({
@@ -322,7 +324,7 @@ Generate a JSON array of 9 model run objects according to the schema. Ensure eve
         const models = JSON.parse(response.text) as ModelRun[];
         // Post-process to ensure p-values are null for non-statistical models
         return models.map(model => {
-            if (model.algo !== 'Bayesian Regression') {
+            if (model.algo !== 'Bayesian Regression' && model.algo !== 'GLM Regression') {
                 model.details.forEach(d => d.pValue = null);
             }
             return model;
@@ -667,5 +669,57 @@ ${JSON.stringify(existingScenarios.slice(0, 3), null, 2)}
     } catch(e) {
         console.error("Failed to parse optimizer interaction response:", response.text, e);
         throw new Error("Received an invalid JSON format from the AI for the optimizer interaction.");
+    }
+};
+
+const modelRunSchema = {
+    type: Type.OBJECT,
+    properties: leaderboardSchema.items.properties,
+    required: leaderboardSchema.items.required,
+};
+
+export const rerunModel = async (originalModel: ModelRun): Promise<ModelRun> => {
+    const prompt = `
+You are a data science platform simulating a model recalibration. A user has updated parameters for an existing model.
+Based on these new parameters, generate a SINGLE new model run object.
+
+**Original Model State (for context):**
+\`\`\`json
+${JSON.stringify({ id: originalModel.id, algo: originalModel.algo, rsq: originalModel.rsq, mape: originalModel.mape, roi: originalModel.roi }, null, 2)}
+\`\`\`
+
+**User's Updated Model Parameters (this is the new target state):**
+\`\`\`json
+${JSON.stringify(originalModel, null, 2)}
+\`\`\`
+
+**Task:**
+1.  **Generate a new unique ID.** Append a suffix to the original ID. For example, if the original ID is "glm_1", the new ID should be "glm_1_cal_1". If it's already a calibrated model like "glm_1_cal_1", make it "glm_1_cal_2".
+2.  **Plausibly adjust metrics.** Based on the changes in the 'details' array (e.g., a channel was excluded, adstock changed), make small, logical adjustments to the top-level metrics (\`rsq\`, \`mape\`, \`roi\`). For example, excluding a channel with a p-value > 0.1 might slightly IMPROVE the model, while excluding one with p < 0.05 will likely WORSEN it (lower rsq, higher mape). Changing adstock should cause minor fluctuations. When a channel is excluded, its contribution must be redistributed among other channels. The total contribution should remain similar. The blended ROI should also be recalculated.
+3.  **Write a new commentary.** The commentary should briefly mention what was changed from the original model (e.g., "Recalibrated from ${originalModel.id} by excluding 'Samples' channel.").
+4.  **Return the complete new model object.** The 'details' array in your response should be identical to the one in the "User's Updated Model Parameters" input. The overall object must match the schema.
+
+Return a single JSON object matching the provided schema. Ensure every field is populated correctly.
+`;
+
+    const response = await ai.models.generateContent({
+        model: "gemini-2.5-flash",
+        contents: prompt,
+        config: {
+            responseMimeType: "application/json",
+            responseSchema: modelRunSchema,
+        },
+    });
+
+    try {
+        const newModel = JSON.parse(response.text);
+        // Post-process to ensure p-values are null for non-statistical models, preserving the logic
+        if (newModel.algo !== 'Bayesian Regression' && newModel.algo !== 'GLM Regression') {
+            newModel.details.forEach((d: ModelDetail) => d.pValue = null);
+        }
+        return newModel as ModelRun;
+    } catch (e) {
+        console.error("Failed to parse rerun model response:", response.text, e);
+        throw new Error("Received an invalid JSON format from the AI for the recalibrated model.");
     }
 };

@@ -46,9 +46,9 @@ const ScenarioDetail: React.FC<{ scenario: OptimizerScenario, modelId: string }>
         <div className="animate-fade-in flex flex-col h-full">
             <div className="flex justify-between items-center mb-6">
                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center w-full">
-                    <div className="bg-slate-900/50 p-4 rounded-lg"><div className="text-sm text-slate-400">Recommended Spend</div><div className="text-3xl font-bold">${scenario.recommendedSpend.toFixed(1)}M</div></div>
-                    <div className="bg-slate-900/50 p-4 rounded-lg"><div className="text-sm text-slate-400">Projected ROI</div><div className={`text-3xl font-bold ${scenario.projectedROI < 0 ? 'text-red-400' : 'text-green-400'}`}>${scenario.projectedROI.toFixed(2)}</div></div>
-                    <div className="bg-slate-900/50 p-4 rounded-lg"><div className="text-sm text-slate-400">Net Revenue</div><div className={`text-3xl font-bold ${scenario.netRevenue < 0 ? 'text-red-400' : 'text-green-400'}`}>${scenario.netRevenue.toFixed(1)}M</div></div>
+                    <div className="bg-gray-100 p-4 rounded-lg"><div className="text-sm text-gray-500">Recommended Spend</div><div className="text-3xl font-bold">${scenario.recommendedSpend.toFixed(1)}M</div></div>
+                    <div className="bg-gray-100 p-4 rounded-lg"><div className="text-sm text-gray-500">Projected ROI</div><div className={`text-3xl font-bold ${scenario.projectedROI < 0 ? 'text-red-600' : 'text-green-600'}`}>${scenario.projectedROI.toFixed(2)}</div></div>
+                    <div className="bg-gray-100 p-4 rounded-lg"><div className="text-sm text-gray-500">Net Revenue</div><div className={`text-3xl font-bold ${scenario.netRevenue < 0 ? 'text-red-600' : 'text-green-600'}`}>${scenario.netRevenue.toFixed(1)}M</div></div>
                 </div>
             </div>
              <div className="flex justify-end mb-4">
@@ -58,19 +58,19 @@ const ScenarioDetail: React.FC<{ scenario: OptimizerScenario, modelId: string }>
             </div>
             <div className="overflow-x-auto flex-grow">
                 <table className="w-full text-left text-sm">
-                    <thead className="bg-slate-700/50"><tr><th className="p-3">Channel</th><th className="p-3">Current Spend</th><th className="p-3">Recommended Spend</th><th className="p-3">Change</th><th className="p-3">Projected ROI</th><th className="p-3 w-1/3">Agent Commentary</th></tr></thead>
+                    <thead className="bg-gray-100"><tr><th className="p-3">Channel</th><th className="p-3">Current Spend</th><th className="p-3">Recommended Spend</th><th className="p-3">Change</th><th className="p-3">Projected ROI</th><th className="p-3 w-1/3">Agent Commentary</th></tr></thead>
                     <tbody>
                         {scenario.channels.map(channel => {
-                            const changeColor = channel.change >= 0 ? 'text-green-400' : 'text-red-400';
-                            const roiColor = channel.projectedROI < 0 ? 'text-red-400' : 'text-green-400';
+                            const changeColor = channel.change >= 0 ? 'text-green-600' : 'text-red-600';
+                            const roiColor = channel.projectedROI < 0 ? 'text-red-600' : 'text-green-600';
                             return (
-                                <tr key={channel.name} className="border-b border-slate-700">
+                                <tr key={channel.name} className="border-b border-gray-200">
                                     <td className="p-3 font-semibold">{channel.name}</td>
                                     <td className="p-3">${channel.currentSpend.toFixed(1)}M</td>
                                     <td className="p-3 font-bold">${channel.recommendedSpend.toFixed(1)}M</td>
                                     <td className={`p-3 font-bold ${changeColor}`}>{channel.change >= 0 ? '+' : ''}{channel.change.toFixed(0)}%</td>
                                     <td className={`p-3 font-bold ${roiColor}`}>${channel.projectedROI.toFixed(2)}</td>
-                                    <td className="p-3 text-slate-400 text-xs italic">{channel.agentCommentary}</td>
+                                    <td className="p-3 text-gray-500 text-xs italic">{channel.agentCommentary}</td>
                                 </tr>
                             );
                         })}
@@ -91,16 +91,16 @@ export const Optimizer: React.FC<OptimizerProps> = ({ model, scenarios, activeSc
     const activeScenario = scenarios.find(s => s.id === activeScenarioId) || scenarios[0];
 
     return (
-        <div className="p-4 md:p-6 max-w-7xl mx-auto h-full">
+        <div className="p-4 md:p-6 max-w-full mx-auto h-full">
             <div className="glass-pane p-6 h-full flex flex-col">
                  <div className="mb-6">
-                    <h2 className="text-2xl font-semibold text-white mb-2">Budget Optimization Scenarios</h2>
-                    <p className="text-gray-400">Based on your finalized model (<strong>{model.id}</strong>), here are several budget allocation scenarios. Ask the agent to create new ones based on your goals.</p>
+                    <h2 className="text-2xl font-semibold text-gray-900 mb-2">Budget Optimization Scenarios</h2>
+                    <p className="text-gray-600">Based on your finalized model (<strong>{model.id}</strong>), here are several budget allocation scenarios. Ask the agent to create new ones based on your goals.</p>
                  </div>
 
                  <div className="flex-grow flex gap-8 overflow-hidden">
                     {/* Scenario List */}
-                    <nav className="w-1/3 md:w-1/4 flex-shrink-0 overflow-y-auto custom-scrollbar pr-4 -mr-4 border-r border-slate-700/50">
+                    <nav className="w-1/3 md:w-1/4 flex-shrink-0 overflow-y-auto custom-scrollbar pr-4 -mr-4 border-r border-gray-200">
                         <ul className="space-y-2">
                             {scenarios.map(scenario => {
                                 const isActive = scenario.id === activeScenarioId;
@@ -110,11 +110,11 @@ export const Optimizer: React.FC<OptimizerProps> = ({ model, scenarios, activeSc
                                         onClick={() => onSelectScenario(scenario.id)} 
                                         className={`w-full text-left p-3 rounded-lg transition-colors relative text-sm ${
                                             isActive 
-                                            ? 'bg-indigo-500/20 text-white font-semibold' 
-                                            : 'text-slate-300 hover:bg-slate-700/50'
+                                            ? 'bg-[#EC7200]/20 text-[#1A1628] font-semibold' 
+                                            : 'text-gray-700 hover:bg-gray-100'
                                         }`}
                                     >
-                                        {isActive && <div className="absolute left-0 top-0 h-full w-1 bg-indigo-400 rounded-l-lg"></div>}
+                                        {isActive && <div className="absolute left-0 top-0 h-full w-1 bg-[#EC7200] rounded-l-lg"></div>}
                                         {scenario.title}
                                     </button>
                                 </li>

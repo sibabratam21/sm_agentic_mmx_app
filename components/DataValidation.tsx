@@ -15,10 +15,10 @@ interface DataValidationProps {
 }
 
 const chartColors = {
-  kpi: '#2dd4bf', 
-  grid: 'rgba(100, 116, 139, 0.2)',
-  text: '#94a3b8',
-  bar: '#60a5fa',
+  kpi: 'var(--color-teal)', 
+  grid: 'rgba(26, 22, 40, 0.1)',
+  text: '#1A1628',
+  bar: 'var(--color-orange)',
 }
 
 const calculateCorrelation = (arr1: number[], arr2: number[]): number => {
@@ -42,10 +42,10 @@ const calculateCorrelation = (arr1: number[], arr2: number[]): number => {
 };
 
 const getCorrelationColor = (value: number) => {
-    if (value === 1) return 'bg-slate-700/50';
-    if (Math.abs(value) > 0.7) return 'bg-red-500/60';
-    if (Math.abs(value) > 0.4) return 'bg-yellow-500/60';
-    return 'bg-slate-800/30';
+    if (value === 1) return 'bg-gray-200/50';
+    if (Math.abs(value) > 0.7) return 'bg-red-500/30';
+    if (Math.abs(value) > 0.4) return 'bg-yellow-500/30';
+    return 'bg-white';
 };
 
 
@@ -117,13 +117,13 @@ export const DataValidation: React.FC<DataValidationProps> = ({
                     <>
                         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                             <div className="lg:col-span-2">
-                                <h4 className="font-semibold text-slate-200 mb-2">Dependent Variable Trend</h4>
-                                <p className="text-sm text-slate-400 mb-4">{insights?.trendsSummary}</p>
+                                <h4 className="font-semibold text-gray-800 mb-2">Dependent Variable Trend</h4>
+                                <p className="text-sm text-gray-600 mb-4">{insights?.trendsSummary}</p>
                                 <ResponsiveContainer width="100%" height={300}>
                                     <LineChart data={insights?.trendData}>
                                         <CartesianGrid strokeDasharray="3 3" stroke={chartColors.grid} />
                                         <XAxis dataKey="date" stroke={chartColors.text} tick={{ fontSize: 12 }} />
-                                        <YAxis stroke={chartColors.kpi} tick={{ fontSize: 12 }} />
+                                        <YAxis stroke={chartColors.kpi} tick={{ fontSize: 12, fill: chartColors.kpi }} />
                                         <Tooltip wrapperClassName="glass-pane" />
                                         <Legend wrapperStyle={{color: chartColors.text}}/>
                                         <Line type="monotone" dataKey="kpi" name={Object.keys(selections).find(k => selections[k] === ColumnType.DEPENDENT_VARIABLE)} stroke={chartColors.kpi} strokeWidth={2} dot={false} />
@@ -131,17 +131,17 @@ export const DataValidation: React.FC<DataValidationProps> = ({
                                 </ResponsiveContainer>
                             </div>
                             <div>
-                                <h4 className="font-semibold text-slate-200 mb-2">AI Summary</h4>
-                                <div className="bg-slate-900/50 p-4 rounded-lg text-sm text-slate-300 space-y-2">
+                                <h4 className="font-semibold text-gray-800 mb-2">AI Summary</h4>
+                                <div className="bg-gray-100 p-4 rounded-lg text-sm text-gray-700 space-y-2">
                                     <p>{insights?.diagnosticsSummary}</p>
                                 </div>
                             </div>
                         </div>
                         <div className="mt-8">
-                            <h4 className="font-semibold text-slate-200 mb-2">Channel Diagnostics</h4>
+                            <h4 className="font-semibold text-gray-800 mb-2">Channel Diagnostics</h4>
                             <div className="overflow-x-auto">
                             <table className="w-full text-left text-sm">
-                                <thead className="bg-slate-700/50">
+                                <thead className="bg-gray-100">
                                     <tr>
                                         <th className="p-3">Channel</th>
                                         <th className="p-3">Sparsity</th>
@@ -154,29 +154,29 @@ export const DataValidation: React.FC<DataValidationProps> = ({
                                 <tbody>
                                     {diagnostics.map((d, i) => {
                                         const trendValue = parseFloat(d.yoyTrend);
-                                        const trendColor = trendValue > 0 ? 'text-green-400' : trendValue < 0 ? 'text-red-400' : 'text-slate-300';
+                                        const trendColor = trendValue > 0 ? 'text-green-600' : trendValue < 0 ? 'text-red-600' : 'text-gray-700';
                                         const volatilityValue = parseFloat(d.volatility);
-                                        const volatilityColor = volatilityValue > 50 ? 'text-yellow-400' : 'text-slate-300';
+                                        const volatilityColor = volatilityValue > 50 ? 'text-yellow-600' : 'text-gray-700';
                                         return (
-                                            <tr key={d.name} className="border-b border-slate-700">
+                                            <tr key={d.name} className="border-b border-gray-200">
                                                 <td className="p-3 font-semibold">{d.name}</td>
                                                 <td className="p-3">{d.sparsity}</td>
                                                 <td className={`p-3 font-mono ${volatilityColor}`}>{d.volatility}</td>
                                                 <td className={`p-3 font-mono font-bold ${trendColor}`}>{d.yoyTrend}</td>
-                                                <td className="p-3 text-slate-400 text-xs italic">{d.commentary}</td>
+                                                <td className="p-3 text-gray-500 text-xs italic">{d.commentary}</td>
                                                 <td className="p-3 text-center">
                                                     <div className="inline-flex rounded-md shadow-sm" role="group">
                                                         <button
                                                             type="button"
                                                             onClick={() => handleToggleAction(i, true)}
-                                                            className={`px-3 py-1 text-xs font-medium border rounded-l-lg transition-colors ${d.isApproved ? 'bg-green-600 text-white border-green-600' : 'bg-transparent text-slate-300 border-slate-500 hover:bg-slate-700'}`}
+                                                            className={`px-3 py-1 text-xs font-medium border rounded-l-lg transition-colors ${d.isApproved ? 'bg-[#32A29B] text-white border-[#32A29B]' : 'bg-transparent text-gray-600 border-gray-300 hover:bg-gray-100'}`}
                                                         >
                                                             Approve
                                                         </button>
                                                         <button
                                                             type="button"
                                                             onClick={() => handleToggleAction(i, false)}
-                                                            className={`px-3 py-1 text-xs font-medium border rounded-r-lg transition-colors ${!d.isApproved ? 'bg-slate-600 text-white border-slate-600' : 'bg-transparent text-slate-300 border-slate-500 hover:bg-slate-700'}`}
+                                                            className={`px-3 py-1 text-xs font-medium border rounded-r-lg transition-colors ${!d.isApproved ? 'bg-gray-500 text-white border-gray-500' : 'bg-transparent text-gray-600 border-gray-300 hover:bg-gray-100'}`}
                                                         >
                                                             Exclude
                                                         </button>
@@ -194,20 +194,20 @@ export const DataValidation: React.FC<DataValidationProps> = ({
             case 'correlation':
                 return (
                      <div className="overflow-x-auto">
-                        <p className="text-sm text-slate-400 mb-4">Correlation matrix of marketing channels. High values (&gt;0.7, in red) may indicate multicollinearity, which can make model results unstable.</p>
+                        <p className="text-sm text-gray-600 mb-4">Correlation matrix of marketing channels. High values (&gt;0.7, in red) may indicate multicollinearity, which can make model results unstable.</p>
                         <table className="w-full text-center text-xs border-collapse">
                             <thead>
                                 <tr>
-                                    <th className="p-2 border border-slate-700 bg-slate-700/50"></th>
-                                    {marketingChannels.map(ch => <th key={ch} className="p-2 border border-slate-700 bg-slate-700/50 font-medium">{ch}</th>)}
+                                    <th className="p-2 border border-gray-200 bg-gray-100"></th>
+                                    {marketingChannels.map(ch => <th key={ch} className="p-2 border border-gray-200 bg-gray-100 font-medium">{ch}</th>)}
                                 </tr>
                             </thead>
                             <tbody>
                                 {marketingChannels.map(ch1 => (
                                     <tr key={ch1}>
-                                        <td className="p-2 border border-slate-700 font-medium bg-slate-700/50">{ch1}</td>
+                                        <td className="p-2 border border-gray-200 font-medium bg-gray-100">{ch1}</td>
                                         {marketingChannels.map(ch2 => (
-                                            <td key={ch2} className={`p-2 border border-slate-700 font-mono ${getCorrelationColor(correlationMatrix[ch1]?.[ch2] ?? 0)}`}>
+                                            <td key={ch2} className={`p-2 border border-gray-200 font-mono ${getCorrelationColor(correlationMatrix[ch1]?.[ch2] ?? 0)}`}>
                                                 {correlationMatrix[ch1]?.[ch2]?.toFixed(2)}
                                             </td>
                                         ))}
@@ -220,7 +220,7 @@ export const DataValidation: React.FC<DataValidationProps> = ({
             case 'sparsity':
                 return (
                     <div>
-                        <p className="text-sm text-slate-400 mb-4">Sparsity of marketing channels, measured as the percentage of zero-value entries. High sparsity may affect model stability or indicate "flighted" campaigns.</p>
+                        <p className="text-sm text-gray-600 mb-4">Sparsity of marketing channels, measured as the percentage of zero-value entries. High sparsity may affect model stability or indicate "flighted" campaigns.</p>
                         <ResponsiveContainer width="100%" height={350}>
                             <BarChart data={sparsityData} margin={{ top: 5, right: 20, left: 0, bottom: 80 }}>
                                 <CartesianGrid strokeDasharray="3 3" stroke={chartColors.grid} />
@@ -243,15 +243,15 @@ export const DataValidation: React.FC<DataValidationProps> = ({
         <div className="p-4 md:p-6 space-y-8 max-w-7xl mx-auto">
             {/* Column Selection */}
             <div className="glass-pane p-6">
-                 <h3 className="text-xl font-semibold text-white mb-4">1. Confirm Column Roles</h3>
+                 <h3 className="text-xl font-semibold text-gray-900 mb-4">1. Confirm Column Roles</h3>
                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     {edaResults.map(col => (
                         <div key={col.columnName}>
-                            <label className="block text-sm font-medium text-slate-300 mb-1.5">{col.columnName}</label>
+                            <label className="block text-sm font-medium text-gray-700 mb-1.5">{col.columnName}</label>
                             <select
                             value={selections[col.columnName] || ''}
                             onChange={(e) => onSelectionsChange({ ...selections, [col.columnName]: e.target.value as ColumnType })}
-                            className="w-full bg-slate-700/50 border border-slate-600 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-white"
+                            className="w-full bg-white border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-2 focus:ring-[#EC7200] text-gray-900"
                             >
                             {Object.values(ColumnType).map(ct => <option key={ct} value={ct}>{ct}</option>)}
                             </select>
@@ -260,33 +260,53 @@ export const DataValidation: React.FC<DataValidationProps> = ({
                 </div>
             </div>
 
-            {isLoadingInsights && <div className="flex justify-center items-center h-64"><Loader /></div>}
+            {/* Initial Loader */}
+            {isLoadingInsights && !insights && (
+                <div className="glass-pane p-6 flex justify-center items-center min-h-[24rem]">
+                    <div className="text-center">
+                        <Loader />
+                        <p className="mt-2 font-medium text-gray-600">Running initial diagnostics...</p>
+                    </div>
+                </div>
+            )}
 
             {/* Diagnostics & Visuals */}
             {insights && (
-                 <div className="glass-pane p-6">
-                    <h3 className="text-xl font-semibold text-white mb-6">2. Review Diagnostics & Data Quality</h3>
-                    
-                    <div className="border-b border-slate-700/50 mb-6">
-                        <nav className="-mb-px flex space-x-6" aria-label="Tabs">
-                            {tabs.map(tab => (
-                                <button
-                                    key={tab.id}
-                                    onClick={() => setActiveTab(tab.id as any)}
-                                    className={`whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm transition-colors ${
-                                        activeTab === tab.id
-                                        ? 'border-indigo-500 text-indigo-400'
-                                        : 'border-transparent text-slate-400 hover:text-slate-200 hover:border-slate-500'
-                                    }`}
-                                >
-                                    {tab.name}
-                                </button>
-                            ))}
-                        </nav>
-                    </div>
-                    
-                    <div>
-                        {renderTabContent()}
+                 <div className="glass-pane p-6 relative">
+                    {/* Update Loader Overlay */}
+                    {isLoadingInsights && (
+                        <div className="absolute inset-0 bg-white/70 backdrop-blur-sm flex justify-center items-center rounded-lg z-10">
+                            <div className="text-center">
+                                <Loader />
+                                <p className="mt-2 font-medium text-gray-600">Updating diagnostics...</p>
+                            </div>
+                        </div>
+                    )}
+
+                    <div className={isLoadingInsights ? 'opacity-40 transition-opacity' : ''}>
+                        <h3 className="text-xl font-semibold text-gray-900 mb-6">2. Review Diagnostics & Data Quality</h3>
+                        
+                        <div className="border-b border-gray-200 mb-6">
+                            <nav className="-mb-px flex space-x-6" aria-label="Tabs">
+                                {tabs.map(tab => (
+                                    <button
+                                        key={tab.id}
+                                        onClick={() => setActiveTab(tab.id as any)}
+                                        className={`whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm transition-colors ${
+                                            activeTab === tab.id
+                                            ? 'border-[#EC7200] text-[#EC7200]'
+                                            : 'border-transparent text-gray-500 hover:text-gray-800 hover:border-gray-300'
+                                        }`}
+                                    >
+                                        {tab.name}
+                                    </button>
+                                ))}
+                            </nav>
+                        </div>
+                        
+                        <div>
+                            {renderTabContent()}
+                        </div>
                     </div>
                  </div>
             )}

@@ -8,9 +8,9 @@ interface FinalReportProps {
 }
 
 const chartColors = {
-  line: '#60a5fa', 
-  grid: 'rgba(100, 116, 139, 0.2)',
-  text: '#94a3b8'
+  line: 'var(--color-teal)', 
+  grid: 'rgba(26, 22, 40, 0.1)',
+  text: '#1A1628'
 }
 
 const generateResponseCurve = (channel: ModelDetail, totalImpact: number) => {
@@ -68,7 +68,7 @@ export const FinalReport: React.FC<FinalReportProps> = ({ model, onGoToOptimizer
         return { name: p.name, spend, attributedKPI, impactPercentage, avgROI, mROI };
     });
 
-    const blendedRoiColor = model.roi < 0 ? 'text-red-400' : 'text-green-400';
+    const blendedRoiColor = model.roi < 0 ? 'text-red-600' : 'text-green-600';
     
     const handleExport = () => {
         let textContent = `MMM Final Report - Model ID: ${model.id} (${model.algo})\n`;
@@ -115,7 +115,7 @@ export const FinalReport: React.FC<FinalReportProps> = ({ model, onGoToOptimizer
                 <div className="flex justify-between items-start mb-2">
                     <div>
                         <h2 className="text-2xl font-bold">MMx Final Report</h2>
-                        <p className="text-sm text-slate-400">Generated from Calibrated Model ID: <strong>{model.id} ({model.algo})</strong></p>
+                        <p className="text-sm text-gray-500">Generated from Calibrated Model ID: <strong>{model.id} ({model.algo})</strong></p>
                     </div>
                     <div className="flex items-center gap-4">
                         <button onClick={handleExport} className="secondary-button">
@@ -128,27 +128,27 @@ export const FinalReport: React.FC<FinalReportProps> = ({ model, onGoToOptimizer
                 </div>
 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 my-8 text-center">
-                    <div className="bg-slate-900/50 p-3 rounded-lg"><div className="text-sm text-slate-400">R-Square</div><div className="text-3xl font-bold">{model.rsq.toFixed(2)}</div></div>
-                    <div className="bg-slate-900/50 p-3 rounded-lg"><div className="text-sm text-slate-400">MAPE</div><div className="text-3xl font-bold">{model.mape.toFixed(1)}%</div></div>
-                    <div className="bg-slate-900/50 p-3 rounded-lg"><div className="text-sm text-slate-400">Total Spend</div><div className="text-3xl font-bold">${(totalSpend/10).toFixed(1)}M</div></div>
-                    <div className="bg-slate-900/50 p-3 rounded-lg"><div className="text-sm text-slate-400">Blended ROI</div><div className={`text-3xl font-bold ${blendedRoiColor}`}>${model.roi.toFixed(2)}</div></div>
+                    <div className="bg-gray-100 p-3 rounded-lg"><div className="text-sm text-gray-500">R-Square</div><div className="text-3xl font-bold">{model.rsq.toFixed(2)}</div></div>
+                    <div className="bg-gray-100 p-3 rounded-lg"><div className="text-sm text-gray-500">MAPE</div><div className="text-3xl font-bold">{model.mape.toFixed(1)}%</div></div>
+                    <div className="bg-gray-100 p-3 rounded-lg"><div className="text-sm text-gray-500">Total Spend</div><div className="text-3xl font-bold">${(totalSpend/10).toFixed(1)}M</div></div>
+                    <div className="bg-gray-100 p-3 rounded-lg"><div className="text-sm text-gray-500">Blended ROI</div><div className={`text-3xl font-bold ${blendedRoiColor}`}>${model.roi.toFixed(2)}</div></div>
                 </div>
                 
-                <h3 className="text-lg font-semibold text-white mt-8 mb-4">Performance Summary</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mt-8 mb-4">Performance Summary</h3>
                 <div className="overflow-x-auto"><table className="w-full text-left text-sm">
-                    <thead className="bg-slate-700/50"><tr><th className="p-3">Channel</th><th className="p-3">Spend</th><th className="p-3">Attributed KPI</th><th className="p-3">Impact %</th><th className="p-3">Avg. ROI</th><th className="p-3">Marginal ROI (mROI)</th></tr></thead>
+                    <thead className="bg-gray-100"><tr><th className="p-3">Channel</th><th className="p-3">Spend</th><th className="p-3">Attributed KPI</th><th className="p-3">Impact %</th><th className="p-3">Avg. ROI</th><th className="p-3">Marginal ROI (mROI)</th></tr></thead>
                     <tbody>
                         {reportData.map(d => (
-                             <tr key={d.name} className="border-b border-slate-700">
+                             <tr key={d.name} className="border-b border-gray-200">
                                 <td className="p-3 font-semibold">{d.name}</td>
                                 <td className="p-3">${d.spend.toFixed(1)}M</td>
                                 <td className="p-3">{d.attributedKPI.toLocaleString(undefined, {maximumFractionDigits: 0})}</td>
                                 <td className="p-3">{d.impactPercentage.toFixed(1)}%</td>
-                                <td className={`p-3 font-bold ${d.avgROI < 0 ? 'text-red-400' : 'text-green-400'}`}>${d.avgROI.toFixed(2)}</td>
-                                <td className={`p-3 font-bold ${d.mROI < 0 ? 'text-red-400' : 'text-green-400'}`}>${d.mROI.toFixed(2)}</td>
+                                <td className={`p-3 font-bold ${d.avgROI < 0 ? 'text-red-600' : 'text-green-600'}`}>${d.avgROI.toFixed(2)}</td>
+                                <td className={`p-3 font-bold ${d.mROI < 0 ? 'text-red-600' : 'text-green-600'}`}>${d.mROI.toFixed(2)}</td>
                             </tr>
                         ))}
-                         <tr className="border-b border-slate-700 bg-slate-700/30">
+                         <tr className="border-b border-gray-200 bg-gray-50">
                             <td className="p-3 font-semibold">Base Sales / Intercept</td>
                             <td>-</td>
                             <td>{baseImpact.toLocaleString()}</td>
@@ -158,14 +158,14 @@ export const FinalReport: React.FC<FinalReportProps> = ({ model, onGoToOptimizer
                     </tbody>
                 </table></div>
                 
-                <h3 className="text-lg font-semibold text-white mt-8 mb-4">Response Curves</h3>
-                 <p className="text-slate-400 mb-4 text-sm">These curves show the estimated diminishing returns for each channel based on its transformation setting in the final model.</p>
+                <h3 className="text-lg font-semibold text-gray-900 mt-8 mb-4">Response Curves</h3>
+                 <p className="text-gray-600 mb-4 text-sm">These curves show the estimated diminishing returns for each channel based on its transformation setting in the final model.</p>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {includedChannels.map(p => {
                         const chartData = generateResponseCurve(p, totalImpact);
                         return (
-                            <div key={p.name} className="bg-slate-900/50 p-4 rounded-lg">
-                                <h5 className="font-semibold text-center mb-2 text-slate-200">{p.name} <span className="text-xs font-normal text-slate-400">({p.transform})</span></h5>
+                            <div key={p.name} className="bg-gray-100 p-4 rounded-lg">
+                                <h5 className="font-semibold text-center mb-2 text-gray-800">{p.name} <span className="text-xs font-normal text-gray-500">({p.transform})</span></h5>
                                 <ResponsiveContainer width="100%" height={200}>
                                 <LineChart data={chartData}>
                                     <XAxis type="number" dataKey="x" name="Spend" stroke={chartColors.text} tick={{ fontSize: 10 }} unit="k" />

@@ -20,14 +20,14 @@ export const UserInput: React.FC<UserInputProps> = ({ onSubmit, placeholder, dis
     };
     
     return (
-        <div className="p-4 border-t border-slate-700/50 bg-slate-950/70">
+        <div className="p-4 border-t border-gray-200 bg-white/70">
             <form onSubmit={handleSubmit}>
                 <label htmlFor="user-input" className="sr-only">Your feedback</label>
                 <div className="relative">
                     <textarea
                         id="user-input"
                         rows={2}
-                        className="block w-full resize-none rounded-lg border-0 bg-slate-800/80 py-2.5 pl-4 pr-12 text-slate-200 shadow-sm ring-1 ring-inset ring-slate-700 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 disabled:opacity-50 transition-all"
+                        className="block w-full resize-none rounded-lg border-0 bg-gray-100 py-2.5 pl-4 pr-12 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#EC7200] sm:text-sm sm:leading-6 disabled:opacity-50 transition-all"
                         placeholder={placeholder}
                         value={value}
                         onChange={(e) => onValueChange(e.target.value)}
@@ -41,7 +41,7 @@ export const UserInput: React.FC<UserInputProps> = ({ onSubmit, placeholder, dis
                     <div className="absolute inset-y-0 right-0 flex items-center pr-2">
                         <button 
                             type="submit" 
-                            className="inline-flex items-center justify-center rounded-md h-8 w-8 text-white bg-gradient-to-br from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-slate-900 disabled:opacity-50 disabled:hover:bg-transparent transition-all"
+                            className="inline-flex items-center justify-center rounded-md h-8 w-8 text-white bg-[#EC7200] hover:bg-[#d86800] focus:outline-none focus:ring-2 focus:ring-[#EC7200] focus:ring-offset-2 focus:ring-offset-white disabled:opacity-50 disabled:hover:bg-transparent transition-all"
                             disabled={!value.trim() || disabled}
                         >
                             <FiSend className="h-4 w-4" aria-hidden="true" />

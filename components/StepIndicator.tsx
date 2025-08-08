@@ -34,21 +34,22 @@ export const StepIndicator: React.FC<StepIndicatorProps> = ({ currentStep, compl
                 onClick={() => isClickable && onStepClick(step.id)}
                 disabled={!isClickable}
                 className={`step-button-nav text-sm font-medium transition-colors duration-300 disabled:cursor-not-allowed ${
-                  isCurrent ? 'text-slate-100' : isComplete ? 'text-slate-300' : 'text-slate-500'
+                  isCurrent ? 'text-gray-900' : isComplete ? 'text-gray-600' : 'text-gray-400'
                 }`}
               >
                 {step.name}
               </button>
               {isCurrent && (
                 <div 
-                  className="absolute -bottom-5 left-1/2 -translate-x-1/2 w-full h-0.5 bg-gradient-to-r from-indigo-500 to-purple-500"
+                  className="absolute -bottom-5 left-1/2 -translate-x-1/2 w-full h-0.5 bg-[#EC7200]"
                   style={{
-                    filter: 'blur(3px)'
+                    filter: 'blur(3px)',
+                    backgroundColor: 'var(--color-orange)'
                   }}
                 />
               )}
                {isCurrent && (
-                <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 w-3/4 h-0.5 bg-gradient-to-r from-indigo-400 to-purple-400" />
+                <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 w-3/4 h-0.5" style={{backgroundColor: 'var(--color-orange)'}} />
               )}
             </li>
           );
